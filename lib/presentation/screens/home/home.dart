@@ -18,7 +18,7 @@ class _HomeScreenState extends State<HomeScreen> {
     TaskListScreen(projectId: 'your_project_id'),
     const ProjectListScreen(),
     const CalendarScreen(),
-    const DashboardScreen(),
+    DashboardScreen(),
   ];
 
   void _onItemTapped(int index) {
@@ -39,7 +39,7 @@ class _HomeScreenState extends State<HomeScreen> {
           BottomNavigationBarItem(icon: Icon(Icons.dashboard), label: "Dashboard"),
         ],
         currentIndex: _selectedIndex,
-        selectedItemColor: Colors.blueAccent,
+        selectedItemColor: const Color.fromARGB(255, 87, 165, 238),
         unselectedItemColor: Colors.grey,
         onTap: _onItemTapped,
       ),

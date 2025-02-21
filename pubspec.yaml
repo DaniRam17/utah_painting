@@ -31,12 +31,16 @@ dependencies:
   flutter:
     sdk: flutter
   provider: ^6.0.0  
+
+  flutter_chart: ^0.1.0 
  # Add this line with the latest version of the provider package
   # ...other dependencies...
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.8
+  fl_chart: ^0.70.2
+  table_calendar: ^3.2.0
 
 dev_dependencies:
   flutter_test:
