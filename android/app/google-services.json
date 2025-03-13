@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "737432795698",
+    "project_id": "utahpainting-17",
+    "storage_bucket": "utahpainting-17.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:737432795698:android:d62aaf50414d902ca7da2b",
+        "android_client_info": {
+          "package_name": "com.utah.paintingapp.utah_painting"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDOJWi1xvGU9VDn3qQJixzr0uEp0v5toYs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:737432795698:android:029af9e0e8ff1751a7da2b",
+        "android_client_info": {
+          "package_name": "com.utah.paintingapp.utah_painting"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDOJWi1xvGU9VDn3qQJixzr0uEp0v5toYs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,4 +1,4 @@
-package com.example.utah_painting
+package com.utah.paintingapp.utah_painting
 
 import io.flutter.embedding.android.FlutterActivity
 

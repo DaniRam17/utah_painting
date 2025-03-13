@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:utah_painting/presentation/screens/projects/project_list.dart';
 import 'package:utah_painting/presentation/screens/tasks/task_list.dart';
-import 'package:utah_painting/presentation/screens/calendar/calendar.dart' ;
+import 'package:utah_painting/presentation/screens/calendar/calendar.dart';
 import 'package:utah_painting/presentation/screens/home/dashboard.dart';
+import 'package:utah_painting/presentation/screens/notifications/notifications.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -19,6 +20,7 @@ class _HomeScreenState extends State<HomeScreen> {
     const ProjectListScreen(),
     const CalendarScreen(),
     DashboardScreen(),
+    const NotificationsScreen(),
   ];
 
   void _onItemTapped(int index) {
@@ -37,6 +39,7 @@ class _HomeScreenState extends State<HomeScreen> {
           BottomNavigationBarItem(icon: Icon(Icons.business), label: "Proyectos"),
           BottomNavigationBarItem(icon: Icon(Icons.calendar_today), label: "Calendario"),
           BottomNavigationBarItem(icon: Icon(Icons.dashboard), label: "Dashboard"),
+          BottomNavigationBarItem(icon: Icon(Icons.notifications), label: "Notificaciones"),
         ],
         currentIndex: _selectedIndex,
         selectedItemColor: const Color.fromARGB(255, 87, 165, 238),

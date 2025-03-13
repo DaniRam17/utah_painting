@@ -8,7 +8,7 @@
 PRODUCT_NAME = utah_painting
 
 // The application's bundle identifier
-PRODUCT_BUNDLE_IDENTIFIER = com.example.utahPainting
+PRODUCT_BUNDLE_IDENTIFIER = com.utah.paintingapp.utah_painting
 
 // The copyright displayed in application information
-PRODUCT_COPYRIGHT = Copyright © 2025 com.example. All rights reserved.
+PRODUCT_COPYRIGHT = Copyright © 2025 com.utah.paintingapp.utah_painting. All rights reserved.
