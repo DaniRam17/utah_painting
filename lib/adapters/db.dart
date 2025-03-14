@@ -6,7 +6,7 @@ import '../models/user.dart';
 class Db {
   FirebaseFirestore _db = FirebaseFirestore.instance;
 
-  Future<Map<String,dynamic>?> getUserData(String uid) async {
+  Future<Map<String, dynamic>?> getUserData(String uid) async {
     try {
       QuerySnapshot<Map<String, dynamic>> querySnapshot = await _db.collection('users').where('uid', isEqualTo: uid).get();
       if (querySnapshot.docs.isNotEmpty) {

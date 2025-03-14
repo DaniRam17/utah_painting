@@ -24,7 +24,6 @@ class _RegisterScreenState extends State<RegisterScreen> with SingleTickerProvid
   // User data
   final _user = User(
     username: '',
-    role: [],
     fullname: '',
     email: '',
     password: '',

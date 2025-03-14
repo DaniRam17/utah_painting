@@ -8,7 +8,6 @@ import '../adapters/auth.dart';
 import '../adapters/db.dart';
 import '../models/user.dart';
 
-
 class LoginScreen extends StatefulWidget {
   @override
   State<LoginScreen> createState() => _LoginScreenState();
@@ -37,8 +36,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   Future<void> _validateLogin(BuildContext context) async {
     bool isAuthenticated = await _localStorage.getLoginStatus();
-    dynamic dioResponse = await _dioAdapter
-        .getRequest('https://official-joke-api.appspot.com/random_ten');
+    dynamic dioResponse = await _dioAdapter.getRequest('https://official-joke-api.appspot.com/random_ten');
     dynamic httpResponse = await _httpAdapter.getRequest();
     List<dynamic> responseJson = convert.jsonDecode(httpResponse);
 
@@ -54,20 +52,22 @@ class _LoginScreenState extends State<LoginScreen> {
     }
   }
 
-  void _login(BuildContext context) async  {
+  void _login(BuildContext context) async {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
       try {
         dynamic response = await Auth.signInWithEmailAndPassword(_email, _password);
+        print("Response from Auth.signInWithEmailAndPassword: $response"); // Debug print
         if (response == null || response.user == null) {
           setState(() {
             _error = 'Invalid email or password';
           });
           return;
         }
-        print(response.user.uid);
+        print("User UID: ${response.user.uid}"); // Debug print
 
         Map<String, dynamic>? userData = await _db.getUserData(response.user.uid);
+        print("User data from DB: $userData"); // Debug print
         if (userData == null) {
           setState(() {
             _error = 'User not found';
@@ -82,8 +82,8 @@ class _LoginScreenState extends State<LoginScreen> {
         await _localStorage.setLoginStatus(true);
         _goToAppController(context);
       } catch (e) {
-        
-        if(e.toString().contains('The supplied auth credential is incorrec')) {
+        print("Error during login: $e"); // Debug print
+        if (e.toString().contains('The supplied auth credential is incorrect')) {
           setState(() {
             _error = 'Invalid email or password';
           });
@@ -92,8 +92,6 @@ class _LoginScreenState extends State<LoginScreen> {
         setState(() {
           _error = 'An unknown error occurred';
         });
-        print(e);
-
       }
     }
   }
@@ -126,46 +124,47 @@ class _LoginScreenState extends State<LoginScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               const Text('Login', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-            SizedBox(height: 10),
+              SizedBox(height: 10),
               TextFormField(
-                    decoration: const InputDecoration(labelText: 'Email'),
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Please enter your email';
-                      }
-                      if (!value.contains('@')) {
-                        return 'Please enter a valid email';
-                      }
-                      return null;
-                    },
-                    onSaved: (value) => _email = value!,
-                  ),
-                  TextFormField(
-                    decoration: const InputDecoration(labelText: 'Password'),
-                    obscureText: true,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Please enter a password';
-                      }
-                      if (value.length < 6) {
-                        return 'Password must be at least 6 characters';
-                      }
-                      return null;
-                    },
-                    onSaved: (value) => _password = value!,
-                  ),
-                  if (_error.isNotEmpty) ...[
-                    SizedBox(height: 10),
-                    Text(_error, style: TextStyle(color: Colors.red)),
-                  ],
-                  SizedBox(height: 10),
+                decoration: const InputDecoration(labelText: 'Email'),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter your email';
+                  }
+                  if (!value.contains('@')) {
+                    return 'Please enter a valid email';
+                  }
+                  return null;
+                },
+                onSaved: (value) => _email = value!,
+              ),
+              TextFormField(
+                decoration: const InputDecoration(labelText: 'Password'),
+                obscureText: true,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter a password';
+                  }
+                  if (value.length < 6) {
+                    return 'Password must be at least 6 characters';
+                  }
+                  return null;
+                },
+                onSaved: (value) => _password = value!,
+              ),
+              if (_error.isNotEmpty) ...[
+                SizedBox(height: 10),
+                Text(_error, style: TextStyle(color: Colors.red)),
+              ],
+              SizedBox(height: 10),
               Container(
                 child: Center(
                   child: ElevatedButton(
-                      onPressed: () {
-                        _login(context);
-                      },
-                      child: const Text("Login")),
+                    onPressed: () {
+                      _login(context);
+                    },
+                    child: const Text("Login"),
+                  ),
                 ),
               ),
               SizedBox(height: 10),
