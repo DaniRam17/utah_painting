@@ -50,7 +50,7 @@ class HomeScreen extends StatelessWidget {
                     radius: 30,
                     backgroundImage: user?.profilePic.isNotEmpty == true
                         ? NetworkImage(user!.profilePic)
-                        : AssetImage('assets/default_profile.png') as ImageProvider,
+                        : AssetImage('https://flic.kr/p/2qSEg6P') as ImageProvider,
                   ),
                   SizedBox(height: 10),
                   userProvider.isLoading
@@ -85,8 +85,8 @@ class HomeScreen extends StatelessWidget {
 
   ListTile _buildDrawerItem(BuildContext context, IconData icon, String title, Widget screen) {
     return ListTile(
-      leading: Icon(icon, color: Colors.white70),
-      title: Text(title, style: TextStyle(color: Colors.white)),
+      leading: Icon(icon, color: const Color.fromARGB(179, 9, 52, 126)),
+      title: Text(title, style: TextStyle(color: const Color.fromARGB(255, 42, 41, 41))),
       onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => screen)),
     );
   }

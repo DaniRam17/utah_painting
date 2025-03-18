@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import '../adapters/http_adapter.dart';
 
 class ProfileScreen extends StatefulWidget {
   @override
@@ -10,6 +11,7 @@ class ProfileScreen extends StatefulWidget {
 class _ProfileScreenState extends State<ProfileScreen> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _db = FirebaseFirestore.instance;
+  final HttpAdapter _httpAdapter = HttpAdapter();
   final TextEditingController nameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   String profilePic = '';
@@ -48,6 +50,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
     }
   }
 
+  Future<void> _setRandomProfilePic() async {
+    String? newProfilePic = await _httpAdapter.getRandomProfilePic();
+    if (newProfilePic != null) {
+      setState(() {
+        profilePic = newProfilePic;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -58,7 +69,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
           children: [
             CircleAvatar(
               radius: 50,
-              backgroundImage: profilePic.isNotEmpty ? NetworkImage(profilePic) : AssetImage('assets/default_profile.png') as ImageProvider,
+              backgroundImage: profilePic.isNotEmpty ? NetworkImage(profilePic) : AssetImage('https://flic.kr/p/2qSEg6P') as ImageProvider,
+            ),
+            SizedBox(height: 10),
+            TextButton(
+              onPressed: _setRandomProfilePic,
+              child: Text('Generar Imagen Aleatoria', style: TextStyle(color: Colors.blueAccent)),
             ),
             SizedBox(height: 20),
             TextField(controller: nameController, decoration: InputDecoration(labelText: 'Nombre')),

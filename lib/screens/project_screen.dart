@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../models/project.dart';
-import '../adapters/local_storage.dart';
+import '../providers/project_provider.dart';
 import '../adapters/db.dart';
+import 'package:provider/provider.dart';
 
 class ProjectScreen extends StatefulWidget {
   @override
@@ -10,9 +11,6 @@ class ProjectScreen extends StatefulWidget {
 }
 
 class _ProjectScreenState extends State<ProjectScreen> {
-  List<ProjectModel> _projects = [];
-  bool _isLoading = true;
-
   final TextEditingController nameController = TextEditingController();
   final TextEditingController descriptionController = TextEditingController();
   String _selectedStatus = "Por Hacer";
@@ -23,25 +21,7 @@ class _ProjectScreenState extends State<ProjectScreen> {
   @override
   void initState() {
     super.initState();
-    _loadProjects();
-  }
-
-  void _loadProjects() async {
-    List<ProjectModel>? cachedProjects = LocalStorage.getProjects();
-    if (cachedProjects != null && cachedProjects.isNotEmpty) {
-      setState(() {
-        _projects = cachedProjects;
-        _isLoading = false;
-      });
-    }
-    List<ProjectModel> projects = await DatabaseService().getProjects();
-    if (projects.isNotEmpty) {
-      LocalStorage.setProjects(projects);
-      setState(() {
-        _projects = projects;
-        _isLoading = false;
-      });
-    }
+    Provider.of<ProjectProvider>(context, listen: false).fetchProjects();
   }
 
   void _addProject() async {
@@ -55,8 +35,7 @@ class _ProjectScreenState extends State<ProjectScreen> {
         startDate: _startDate,
         endDate: _endDate,
       );
-      await DatabaseService().createProject(newProject);
-      _loadProjects();
+      await Provider.of<ProjectProvider>(context, listen: false).addProject(newProject);
       nameController.clear();
       descriptionController.clear();
       Navigator.pop(context);
@@ -85,27 +64,31 @@ class _ProjectScreenState extends State<ProjectScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text('Proyectos')),
-      body: _isLoading
-          ? Center(child: CircularProgressIndicator())
-          : ListView.builder(
-              itemCount: _projects.length,
-              itemBuilder: (context, index) {
-                var project = _projects[index];
-                return Card(
-                  child: ListTile(
-                    title: Text(project.name),
-                    subtitle: Text('Estado: ${project.status}'),
-                    trailing: IconButton(
-                      icon: Icon(Icons.delete, color: Colors.red),
-                      onPressed: () async {
-                        await DatabaseService().deleteProject(project.id);
-                        _loadProjects();
-                      },
-                    ),
+      body: Consumer<ProjectProvider>(
+        builder: (context, projectProvider, child) {
+          if (projectProvider.isLoading) {
+            return Center(child: CircularProgressIndicator());
+          }
+          return ListView.builder(
+            itemCount: projectProvider.projects.length,
+            itemBuilder: (context, index) {
+              var project = projectProvider.projects[index];
+              return Card(
+                child: ListTile(
+                  title: Text(project.name),
+                  subtitle: Text('Estado: ${project.status}'),
+                  trailing: IconButton(
+                    icon: Icon(Icons.delete, color: Colors.red),
+                    onPressed: () async {
+                      await Provider.of<ProjectProvider>(context, listen: false).deleteProject(project.id);
+                    },
                   ),
-                );
-              },
-            ),
+                ),
+              );
+            },
+          );
+        },
+      ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => _showAddProjectDialog(),
         child: Icon(Icons.add),

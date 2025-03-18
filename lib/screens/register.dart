@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import '/adapters/db.dart';
-import '/models/user.dart';
-import 'home.dart';
+import '../adapters/db.dart';
+import '../models/user.dart';
+import '../screens/home.dart';
+import '../adapters/http_adapter.dart';
 
 class RegisterScreen extends StatefulWidget {
   @override
@@ -12,6 +13,7 @@ class RegisterScreen extends StatefulWidget {
 class _RegisterScreenState extends State<RegisterScreen> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final DatabaseService _db = DatabaseService();
+  final HttpAdapter _httpAdapter = HttpAdapter();
   final TextEditingController nameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
@@ -23,11 +25,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
         password: passwordController.text,
       );
 
+      // Obtener imagen de perfil aleatoria
+      String profilePic = await _httpAdapter.getRandomProfilePic() ?? "";
+
       UserModel newUser = UserModel(
         uid: userCredential.user!.uid,
         name: nameController.text,
         email: emailController.text,
-        profilePic: '',
+        profilePic: profilePic,
         assignedProjects: [],
       );
       await _db.createUser(newUser);

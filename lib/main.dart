@@ -6,6 +6,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import '/screens/home.dart';
 import '/screens/login.dart';
 import '/providers/user_provider.dart';
+import '/providers/project_provider.dart';
+import '/providers/task_provider.dart';
 import '/adapters/local_storage.dart';
 import 'firebase_options.dart';
 
@@ -26,6 +28,8 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => UserProvider()),
+        ChangeNotifierProvider(create: (context) => ProjectProvider()),
+        ChangeNotifierProvider(create: (context) => TaskProvider()),
       ],
       child: MaterialApp(
         title: 'UTAH Painting',

@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../models/task.dart';
-import '../adapters/local_storage.dart';
+import '../providers/task_provider.dart';
 import '../adapters/db.dart';
+import 'package:provider/provider.dart';
 
 class TaskScreen extends StatefulWidget {
   final String projectId;
@@ -14,9 +15,6 @@ class TaskScreen extends StatefulWidget {
 }
 
 class _TaskScreenState extends State<TaskScreen> {
-  List<TaskModel> _tasks = [];
-  bool _isLoading = true;
-
   final TextEditingController nameController = TextEditingController();
   String _selectedPriority = "Media";
   String? _selectedUser;
@@ -26,25 +24,7 @@ class _TaskScreenState extends State<TaskScreen> {
   @override
   void initState() {
     super.initState();
-    _loadTasks();
-  }
-
-  void _loadTasks() async {
-    List<TaskModel>? cachedTasks = LocalStorage.getTasks();
-    if (cachedTasks != null && cachedTasks.isNotEmpty) {
-      setState(() {
-        _tasks = cachedTasks.where((task) => task.projectId == widget.projectId).toList();
-        _isLoading = false;
-      });
-    }
-    List<TaskModel> tasks = await DatabaseService().getTasks();
-    if (tasks.isNotEmpty) {
-      LocalStorage.setTasks(tasks);
-      setState(() {
-        _tasks = tasks.where((task) => task.projectId == widget.projectId).toList();
-        _isLoading = false;
-      });
-    }
+    Provider.of<TaskProvider>(context, listen: false).fetchTasks(widget.projectId);
   }
 
   void _addTask() async {
@@ -60,8 +40,7 @@ class _TaskScreenState extends State<TaskScreen> {
         status: 'Por hacer',
         comments: '',
       );
-      await DatabaseService().createTask(newTask);
-      _loadTasks();
+      await Provider.of<TaskProvider>(context, listen: false).addTask(newTask);
       nameController.clear();
       Navigator.pop(context);
     }
@@ -89,27 +68,31 @@ class _TaskScreenState extends State<TaskScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text('Tareas')),
-      body: _isLoading
-          ? Center(child: CircularProgressIndicator())
-          : ListView.builder(
-              itemCount: _tasks.length,
-              itemBuilder: (context, index) {
-                var task = _tasks[index];
-                return Card(
-                  child: ListTile(
-                    title: Text(task.name),
-                    subtitle: Text('Prioridad: ${task.priority} - Estado: ${task.status}'),
-                    trailing: IconButton(
-                      icon: Icon(Icons.delete, color: Colors.red),
-                      onPressed: () async {
-                        await DatabaseService().deleteTask(task.id);
-                        _loadTasks();
-                      },
-                    ),
+      body: Consumer<TaskProvider>(
+        builder: (context, taskProvider, child) {
+          if (taskProvider.isLoading) {
+            return Center(child: CircularProgressIndicator());
+          }
+          return ListView.builder(
+            itemCount: taskProvider.tasks.length,
+            itemBuilder: (context, index) {
+              var task = taskProvider.tasks[index];
+              return Card(
+                child: ListTile(
+                  title: Text(task.name),
+                  subtitle: Text('Prioridad: ${task.priority} - Estado: ${task.status}'),
+                  trailing: IconButton(
+                    icon: Icon(Icons.delete, color: Colors.red),
+                    onPressed: () async {
+                      await Provider.of<TaskProvider>(context, listen: false).deleteTask(task.id);
+                    },
                   ),
-                );
-              },
-            ),
+                ),
+              );
+            },
+          );
+        },
+      ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => _showAddTaskDialog(),
         child: Icon(Icons.add),
