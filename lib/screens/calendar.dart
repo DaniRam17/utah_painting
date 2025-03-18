@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:intl/intl.dart';
 
@@ -10,26 +11,35 @@ class CalendarScreen extends StatefulWidget {
 
 class _CalendarScreenState extends State<CalendarScreen> {
   final FirebaseFirestore _db = FirebaseFirestore.instance;
+  final FirebaseAuth _auth = FirebaseAuth.instance;
   CalendarFormat _calendarFormat = CalendarFormat.month;
   DateTime _selectedDay = DateTime.now();
-  Map<DateTime, List<String>> _tasksByDate = {};
+  Map<DateTime, List<Map<String, dynamic>>> _tasksByDate = {};
+  String? userId;
 
   @override
   void initState() {
     super.initState();
-    _loadTasks();
+    _loadUserTasks();
   }
 
-  void _loadTasks() async {
-    QuerySnapshot taskSnapshot = await _db.collection('tasks').get();
-    Map<DateTime, List<String>> tempTasks = {};
-    for (var doc in taskSnapshot.docs) {
-      DateTime date = (doc['startDate'] as Timestamp).toDate();
-      tempTasks.putIfAbsent(date, () => []).add(doc['name']);
+  void _loadUserTasks() async {
+    User? user = _auth.currentUser;
+    if (user != null) {
+      userId = user.uid;
+      QuerySnapshot taskSnapshot = await _db.collection('tasks').where('assignedTo', isEqualTo: userId).get();
+      Map<DateTime, List<Map<String, dynamic>>> tempTasks = {};
+      for (var doc in taskSnapshot.docs) {
+        DateTime date = (doc['startDate'] as Timestamp).toDate();
+        tempTasks.putIfAbsent(date, () => []).add({
+          'name': doc['name'],
+          'status': doc['status'],
+        });
+      }
+      setState(() {
+        _tasksByDate = tempTasks;
+      });
     }
-    setState(() {
-      _tasksByDate = tempTasks;
-    });
   }
 
   @override
@@ -63,13 +73,21 @@ class _CalendarScreenState extends State<CalendarScreen> {
           SizedBox(height: 10),
           Expanded(
             child: _tasksByDate[_selectedDay] == null || _tasksByDate[_selectedDay]!.isEmpty
-                ? Center(child: Text('No hay tareas para este día'))
+                ? Center(child: Text('No hay tareas para este día', style: TextStyle(color: Colors.white)))
                 : ListView.builder(
                     itemCount: _tasksByDate[_selectedDay]!.length,
                     itemBuilder: (context, index) {
-                      return ListTile(
-                        title: Text(_tasksByDate[_selectedDay]![index]),
-                        leading: Icon(Icons.check_circle, color: Colors.green),
+                      var task = _tasksByDate[_selectedDay]![index];
+                      return Card(
+                        color: Colors.blueGrey[900],
+                        child: ListTile(
+                          title: Text(task['name'], style: TextStyle(color: Colors.white)),
+                          subtitle: Text('Estado: ${task['status']}', style: TextStyle(color: Colors.white70)),
+                          leading: Icon(
+                            task['status'] == 'Completada' ? Icons.check_circle : Icons.pending_actions,
+                            color: task['status'] == 'Completada' ? Colors.green : Colors.orange,
+                          ),
+                        ),
                       );
                     },
                   ),

@@ -25,7 +25,10 @@ class _MyBottomNavigationBar extends State<MyBottomNavigationBar> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: _screens[_selectedItem],
+      body: IndexedStack(
+        index: _selectedItem,
+        children: _screens,
+      ),
       bottomNavigationBar: BottomNavigationBar(
         items: [
           BottomNavigationBarItem(icon: Icon(Icons.work), label: 'Proyectos'),

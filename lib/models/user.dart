@@ -1,5 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-
 class UserModel {
   String uid;
   String name;
@@ -15,10 +13,10 @@ class UserModel {
     required this.assignedProjects,
   });
 
-  // Convertir un documento Firestore a objeto UserModel
-  factory UserModel.fromMap(Map<String, dynamic> data, String documentId) {
+  // Convertir Firestore Document a UserModel
+  factory UserModel.fromMap(Map<String, dynamic> data) {
     return UserModel(
-      uid: documentId,
+      uid: data['uid'] ?? '',
       name: data['name'] ?? '',
       email: data['email'] ?? '',
       profilePic: data['profilePic'] ?? '',
@@ -26,9 +24,10 @@ class UserModel {
     );
   }
 
-  // Convertir objeto UserModel a Map para Firestore
+  // Convertir UserModel a Firestore Map
   Map<String, dynamic> toMap() {
     return {
+      'uid': uid,
       'name': name,
       'email': email,
       'profilePic': profilePic,
