@@ -1,4 +1,7 @@
+<<<<<<< HEAD
 // task_provider.dart - Agregar updateTask
+=======
+>>>>>>> 455ab0d336b011cd420e673883058461470b706b
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../models/task.dart';
@@ -20,7 +23,11 @@ class TaskProvider with ChangeNotifier {
           .get();
       _tasks = snapshot.docs.map((doc) => TaskModel.fromFirestore(doc)).toList();
     } catch (e) {
+<<<<<<< HEAD
       print('Error obteniendo tareas: \$e');
+=======
+      print('Error obteniendo tareas: $e');
+>>>>>>> 455ab0d336b011cd420e673883058461470b706b
     }
     _isLoading = false;
     notifyListeners();
@@ -33,6 +40,7 @@ class TaskProvider with ChangeNotifier {
       _tasks.add(task);
       notifyListeners();
     } catch (e) {
+<<<<<<< HEAD
       print('Error agregando tarea: \$e');
     }
   }
@@ -47,6 +55,9 @@ class TaskProvider with ChangeNotifier {
       }
     } catch (e) {
       print('Error actualizando tarea: \$e');
+=======
+      print('Error agregando tarea: $e');
+>>>>>>> 455ab0d336b011cd420e673883058461470b706b
     }
   }
 
@@ -56,7 +67,11 @@ class TaskProvider with ChangeNotifier {
       _tasks.removeWhere((task) => task.id == taskId);
       notifyListeners();
     } catch (e) {
+<<<<<<< HEAD
       print('Error eliminando tarea: \$e');
+=======
+      print('Error eliminando tarea: $e');
+>>>>>>> 455ab0d336b011cd420e673883058461470b706b
     }
   }
 }

@@ -31,6 +31,7 @@ class UserProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+<<<<<<< HEAD
   Future<List<Map<String, dynamic>>> getUsers() async {
     try {
       QuerySnapshot snapshot = await FirebaseFirestore.instance.collection('users').get();
@@ -44,6 +45,8 @@ class UserProvider extends ChangeNotifier {
     }
   }
 
+=======
+>>>>>>> 455ab0d336b011cd420e673883058461470b706b
   void updateUserProfile(String newName, String? newProfilePic) async {
     User? firebaseUser = FirebaseAuth.instance.currentUser;
     if (firebaseUser != null) {

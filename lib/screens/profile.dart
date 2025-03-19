@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import '../adapters/http_adapter.dart';
+<<<<<<< HEAD
 import 'tab_controller.dart'; // Importa el menú lateral
+=======
+>>>>>>> 455ab0d336b011cd420e673883058461470b706b
 
 class ProfileScreen extends StatefulWidget {
   @override
@@ -15,8 +18,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
   final HttpAdapter _httpAdapter = HttpAdapter();
   final TextEditingController nameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
+<<<<<<< HEAD
   
   String profilePic = "https://via.placeholder.com/150"; // Imagen por defecto
+=======
+  String profilePic = '';
+>>>>>>> 455ab0d336b011cd420e673883058461470b706b
 
   @override
   void initState() {
@@ -32,7 +39,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
         setState(() {
           nameController.text = userDoc['name'];
           emailController.text = userDoc['email'];
+<<<<<<< HEAD
           profilePic = userDoc['profilePic'] ?? "https://via.placeholder.com/150";
+=======
+          profilePic = userDoc['profilePic'] ?? '';
+>>>>>>> 455ab0d336b011cd420e673883058461470b706b
         });
       }
     }
@@ -64,15 +75,23 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+<<<<<<< HEAD
       drawer: TabControllerDrawer(), // Agrega el menú lateral
       appBar: AppBar(title: Text('Perfil')),
+=======
+      appBar: AppBar(title: Text('Perfil'), backgroundColor: Colors.blueAccent),
+>>>>>>> 455ab0d336b011cd420e673883058461470b706b
       body: Padding(
         padding: EdgeInsets.all(16.0),
         child: Column(
           children: [
             CircleAvatar(
               radius: 50,
+<<<<<<< HEAD
               backgroundImage: NetworkImage(profilePic),
+=======
+              backgroundImage: profilePic.isNotEmpty ? NetworkImage(profilePic) : AssetImage('https://flic.kr/p/2qSEg6P') as ImageProvider,
+>>>>>>> 455ab0d336b011cd420e673883058461470b706b
             ),
             SizedBox(height: 10),
             TextButton(

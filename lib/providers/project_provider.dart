@@ -1,5 +1,8 @@
+<<<<<<< HEAD
 
 // project_provider.dart - Agregar updateProject
+=======
+>>>>>>> 455ab0d336b011cd420e673883058461470b706b
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../models/project.dart';
@@ -18,7 +21,11 @@ class ProjectProvider with ChangeNotifier {
       QuerySnapshot snapshot = await FirebaseFirestore.instance.collection('projects').get();
       _projects = snapshot.docs.map((doc) => ProjectModel.fromFirestore(doc)).toList();
     } catch (e) {
+<<<<<<< HEAD
       print('Error obteniendo proyectos: \$e');
+=======
+      print('Error obteniendo proyectos: $e');
+>>>>>>> 455ab0d336b011cd420e673883058461470b706b
     }
     _isLoading = false;
     notifyListeners();
@@ -31,6 +38,7 @@ class ProjectProvider with ChangeNotifier {
       _projects.add(project);
       notifyListeners();
     } catch (e) {
+<<<<<<< HEAD
       print('Error agregando proyecto: \$e');
     }
   }
@@ -45,6 +53,9 @@ class ProjectProvider with ChangeNotifier {
       }
     } catch (e) {
       print('Error actualizando proyecto: \$e');
+=======
+      print('Error agregando proyecto: $e');
+>>>>>>> 455ab0d336b011cd420e673883058461470b706b
     }
   }
 
@@ -54,7 +65,11 @@ class ProjectProvider with ChangeNotifier {
       _projects.removeWhere((project) => project.id == projectId);
       notifyListeners();
     } catch (e) {
+<<<<<<< HEAD
       print('Error eliminando proyecto: \$e');
+=======
+      print('Error eliminando proyecto: $e');
+>>>>>>> 455ab0d336b011cd420e673883058461470b706b
     }
   }
 }

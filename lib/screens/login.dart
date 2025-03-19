@@ -56,7 +56,11 @@ class _LoginScreenState extends State<LoginScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Image.network(
+<<<<<<< HEAD
                 'https://i.postimg.cc/d3fd7QPs/54394544829-936853c97f-q.jpg',
+=======
+                'https://flic.kr/p/2qSEg6P',
+>>>>>>> 455ab0d336b011cd420e673883058461470b706b
                 height: 100,
               ),
               SizedBox(height: 20),
