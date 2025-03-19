@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "517868283526",
+    "project_id": "utahpainting-71988",
+    "storage_bucket": "utahpainting-71988.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:517868283526:android:a016141a9a092943c31307",
+        "android_client_info": {
+          "package_name": "com.utahpainting17"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCCoblsamRiOX-5zGjeyUGmGiF_oEMHdlw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
